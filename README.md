@@ -13,7 +13,7 @@ Curl instructions & PostMan Instructions
 
     curl -X POST localhost:8080/convertroute \
          -H 'Content-type:application/json' \
-         -d '{"url": "https://www.strava.com/routes/123", "dateTime": "6/9/2023 16:45 BST"}'
+         -d '{"url": "https://www.strava.com/routes/123", "dateTime": "06/09/2023 16:45 IST"}'
 
 Then it will return
 
@@ -28,3 +28,8 @@ Then it will return
 CLI Gradle & Docker
 
     ./gradlew build bootRun
+
+Postman
+Collection: [for testing on Localhost](https://www.postman.com/bold-moon-552911/workspace/cyclingrouteutils/collection/3947605-dfff5988-bae7-479c-9a3d-9045ce20eae1?action=share&creator=3947605).
+
+Swagger UI: [on Localhost](http://localhost:8080/swagger-ui/index.html).
