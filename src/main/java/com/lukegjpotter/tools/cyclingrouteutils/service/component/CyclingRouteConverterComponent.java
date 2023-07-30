@@ -15,27 +15,13 @@ public class CyclingRouteConverterComponent {
 
     private final Logger logger = LoggerFactory.getLogger(CyclingRouteConverterComponent.class);
 
-    private static int determineSubstringBeginIndex(String routeUrl) {
-        int substringBeginIndex = 0;
-
-        if (routeUrl.startsWith("https://www.")) {
-            substringBeginIndex = "https://www.".length();
-        } else if (routeUrl.startsWith("http://www.")) {
-            substringBeginIndex = "http://www.".length();
-        } else if (routeUrl.startsWith("www.")) {
-            substringBeginIndex = "www.".length();
-        } else if (routeUrl.startsWith("https://")) {
-            substringBeginIndex = "https://".length();
-        } else if (routeUrl.startsWith("http://")) {
-            substringBeginIndex = "http://".length();
-        }
-        return substringBeginIndex;
-    }
-
     public RouteUrlsRecord convertRoute(String routeUrl, String dateTimeString) {
         logger.trace("Convert Route");
 
         if (routeUrl.isEmpty()) return new RouteUrlsRecord(routeUrl, "", "");
+        if (routeUrl.startsWith("www.")) routeUrl = "https://" + routeUrl;
+        if (routeUrl.startsWith("strava.com")) routeUrl = "https://www." + routeUrl;
+        if (routeUrl.startsWith("ridewithgps.com")) routeUrl = "https://www." + routeUrl;
 
         try {
             new URL(routeUrl);
@@ -51,7 +37,8 @@ public class CyclingRouteConverterComponent {
 
         int substringBeginIndex = determineSubstringBeginIndex(routeUrl);
 
-        String veloViewerURL = "", myWindSockURL = "", hostname = routeUrl.substring(substringBeginIndex);
+        String veloViewerURL = "", myWindSockURL = "";
+        String hostname = routeUrl.substring(substringBeginIndex);
 
         if (hostname.startsWith("strava.com")) {
             String urlPath = hostname.substring("strava.com/routes/".length());
@@ -70,5 +57,22 @@ public class CyclingRouteConverterComponent {
         ZonedDateTime zonedDateTime = ZonedDateTime.from(
                 DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm z").parse(dateTimeString));
         return "/#forecast=" + zonedDateTime.toEpochSecond();
+    }
+
+    private int determineSubstringBeginIndex(String routeUrl) {
+        int substringBeginIndex = 0;
+
+        if (routeUrl.startsWith("https://www.")) {
+            substringBeginIndex = "https://www.".length();
+        } else if (routeUrl.startsWith("http://www.")) {
+            substringBeginIndex = "http://www.".length();
+        } else if (routeUrl.startsWith("www.")) {
+            substringBeginIndex = "www.".length();
+        } else if (routeUrl.startsWith("https://")) {
+            substringBeginIndex = "https://".length();
+        } else if (routeUrl.startsWith("http://")) {
+            substringBeginIndex = "http://".length();
+        }
+        return substringBeginIndex;
     }
 }

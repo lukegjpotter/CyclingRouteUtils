@@ -84,4 +84,15 @@ class CyclingRouteConverterComponentTest {
 
         assertEquals(expectedRouteUrls, actualRouteUrls);
     }
+
+    @Test
+    public void testConvertRoute_EdgeCase_RouteURLStartsWithWww() {
+        RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
+                "https://www.strava.com/routes/123",
+                "https://www.veloviewer.com/routes/123",
+                "https://mywindsock.com/route/123");
+        RouteUrlsRecord actualRouteUrls = cyclingRouteConverter.convertRoute("www.strava.com/routes/123", "");
+
+        assertEquals(expectedRouteUrls, actualRouteUrls);
+    }
 }
