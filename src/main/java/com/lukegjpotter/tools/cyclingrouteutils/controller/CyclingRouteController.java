@@ -14,14 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController("/")
 public class CyclingRouteController {
 
+    private final Logger logger = LoggerFactory.getLogger(CyclingRouteController.class);
     @Autowired
     private CyclingRouteConverterService converterService;
 
-    private final Logger logger = LoggerFactory.getLogger(CyclingRouteController.class);
-
     @PostMapping("route")
     public RouteUrlsRecord convertRoute(@RequestBody RouteAndDateTimeRecord routeAndDateTime) {
-
         logger.info("Endpoint Convert Route called");
 
         return converterService.convertRoute(routeAndDateTime);

@@ -11,8 +11,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -44,8 +42,7 @@ class CyclingRouteConverterServiceTest {
 
     @Test
     public void testConvertRoute_Strava_DateTime() {
-        //ToDo: Add UTC+1/BST/Dublin Timezone
-        LocalDateTime september6th16h45m = LocalDateTime.of(2023, 9, 6, 16, 45);
+        String september6th16h45m = "06/09/2023 16:45 IST";
 
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://www.strava.com/routes/456",
@@ -75,8 +72,7 @@ class CyclingRouteConverterServiceTest {
 
     @Test
     public void testConvertRoute_RideWithGPS_DateTime() {
-        //ToDo: Add UTC+1/BST/Dublin Timezone
-        LocalDateTime september6th16h45m = LocalDateTime.of(2023, 9, 6, 16, 45);
+        String september6th16h45m = "06/09/2023 16:45 IST";
 
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://ridewithgps.com/routes/456",
