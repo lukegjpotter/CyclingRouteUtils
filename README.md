@@ -5,7 +5,7 @@ URL (Strava Route only) and MyWindSock URL with the timecode of the DateTime sup
 
 ### Deploy Buttons
 
-Heroku, Railways, Render
+Heroku, Railways, Render, Amazon Lambda
 
 ### How to Use
 
