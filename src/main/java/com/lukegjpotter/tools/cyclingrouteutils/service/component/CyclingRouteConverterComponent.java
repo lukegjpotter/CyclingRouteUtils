@@ -20,6 +20,7 @@ public class CyclingRouteConverterComponent {
 
         if (routeUrl.isEmpty()) return new RouteUrlsRecord(routeUrl, "", "");
         if (routeUrl.startsWith("www.")) routeUrl = "https://" + routeUrl;
+        //ToDo: Replace with Or Statement.
         if (routeUrl.startsWith("strava.com")) routeUrl = "https://www." + routeUrl;
         if (routeUrl.startsWith("ridewithgps.com")) routeUrl = "https://www." + routeUrl;
 

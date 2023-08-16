@@ -3,6 +3,11 @@
 A RESTful Service that takes a Strava Route URL, or a RideWithGPS Route URL, and a DateTime, and returns the VeloViewer
 URL (Strava Route only) and MyWindSock URL with the timecode of the DateTime supplied.
 
+### Upcoming Features
+
+Adding Cloud Function/Lambda support.  
+Adding support for Strava App Link Short URLs.
+
 ### Deploy Buttons
 
 Heroku, Railways, Render, Amazon Lambda
