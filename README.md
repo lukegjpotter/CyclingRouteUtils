@@ -16,7 +16,7 @@ Heroku, Railways, Render, Amazon Lambda
 
 Curl instructions & PostMan Instructions
 
-    curl -X POST localhost:8080/convertroute \
+    curl -X POST localhost:8080/route \
          -H 'Content-type:application/json' \
          -d '{"url": "https://www.strava.com/routes/123", "dateTime": "06/09/2023 16:45 IST"}'
 
@@ -28,7 +28,7 @@ Then it will return
       "myWindSockRoute":"https://mywindsock.com/route/123/#forecast=1694015100"
     }
 
-### How to Build
+### How to Build and Run
 
 CLI Gradle & Docker
 
