@@ -15,21 +15,19 @@ public class CyclingRouteConverterComponent {
 
     private final Logger logger = LoggerFactory.getLogger(CyclingRouteConverterComponent.class);
 
-    public RouteUrlsRecord convertRoute(String routeUrl, String dateTimeString) {
+    public RouteUrlsRecord convertRoute(String routeUrl, String dateTimeString) throws MalformedURLException {
         logger.trace("Convert Route");
 
-        if (routeUrl.isEmpty()) return new RouteUrlsRecord(routeUrl, "", "");
+        if (routeUrl.isEmpty()) return new RouteUrlsRecord(routeUrl, "", "", "Route URL is empty.");
         if (routeUrl.startsWith("www.")) routeUrl = "https://" + routeUrl;
-        //ToDo: Replace with Or Statement.
+        // ToDo: Replace with Or Statement.
         if (routeUrl.startsWith("strava.com")) routeUrl = "https://www." + routeUrl;
         if (routeUrl.startsWith("ridewithgps.com")) routeUrl = "https://www." + routeUrl;
 
         try {
             new URL(routeUrl);
         } catch (MalformedURLException e) {
-            // ToDo: handle exception with custom exception.
-            //throw new MalformedURLException(e.toString());
-            return new RouteUrlsRecord(routeUrl, "", "");
+            throw new MalformedURLException(e.toString());
         }
 
         String forecastPostfix = "";
@@ -38,7 +36,7 @@ public class CyclingRouteConverterComponent {
 
         int substringBeginIndex = determineSubstringBeginIndex(routeUrl);
 
-        String veloViewerURL = "", myWindSockURL = "";
+        String veloViewerURL = "", myWindSockURL = "", errorMessage = "";
         String hostname = routeUrl.substring(substringBeginIndex);
 
         if (hostname.startsWith("strava.com")) {
@@ -48,9 +46,11 @@ public class CyclingRouteConverterComponent {
         } else if (hostname.startsWith("ridewithgps.com")) {
             String urlPath = hostname.substring("ridewithgps.com/routes/".length());
             myWindSockURL = "https://mywindsock.com/rwgps/route/" + urlPath + forecastPostfix;
+        } else {
+            errorMessage = "URL is not Strava or RideWithGPS.";
         }
 
-        return new RouteUrlsRecord(routeUrl, veloViewerURL, myWindSockURL);
+        return new RouteUrlsRecord(routeUrl, veloViewerURL, myWindSockURL, errorMessage);
     }
 
     private String convertDateTimeToMyWindSockForecastPostfix(String dateTimeString) {

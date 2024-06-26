@@ -11,6 +11,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.net.MalformedURLException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -24,14 +26,16 @@ class CyclingRouteConverterServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        converterService = new CyclingRouteConverterService(cyclingRouteConverter);
     }
 
     @Test
-    public void testConvertRoute_Strava_NoDateTime() {
+    public void testConvertRoute_Strava_NoDateTime() throws MalformedURLException {
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://www.strava.com/routes/123",
                 "https://www.veloviewer.com/routes/123",
-                "https://mywindsock.com/route/123");
+                "https://mywindsock.com/route/123",
+                "");
 
         Mockito.when(cyclingRouteConverter.convertRoute("https://www.strava.com/routes/123", null)).thenReturn(expectedRouteUrls);
 
@@ -41,13 +45,14 @@ class CyclingRouteConverterServiceTest {
     }
 
     @Test
-    public void testConvertRoute_Strava_DateTime() {
+    public void testConvertRoute_Strava_DateTime() throws MalformedURLException {
         String september6th16h45m = "06/09/2023 16:45 IST";
 
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://www.strava.com/routes/456",
                 "https://www.veloviewer.com/routes/456",
-                "https://mywindsock.com/route/456/#forecast=1694015100");
+                "https://mywindsock.com/route/456/#forecast=1694015100",
+                "");
 
         Mockito.when(cyclingRouteConverter.convertRoute("https://www.strava.com/routes/456", september6th16h45m)).thenReturn(expectedRouteUrls);
 
@@ -57,11 +62,12 @@ class CyclingRouteConverterServiceTest {
     }
 
     @Test
-    public void testConvertRoute_RideWithGPS_NoDateTime() {
+    public void testConvertRoute_RideWithGPS_NoDateTime() throws MalformedURLException {
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://ridewithgps.com/routes/123",
                 "",
-                "https://mywindsock.com/rwgps/route/123");
+                "https://mywindsock.com/rwgps/route/123",
+                "");
 
         Mockito.when(cyclingRouteConverter.convertRoute("https://ridewithgps.com/routes/123", null)).thenReturn(expectedRouteUrls);
 
@@ -71,13 +77,14 @@ class CyclingRouteConverterServiceTest {
     }
 
     @Test
-    public void testConvertRoute_RideWithGPS_DateTime() {
+    public void testConvertRoute_RideWithGPS_DateTime() throws MalformedURLException {
         String september6th16h45m = "06/09/2023 16:45 IST";
 
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://ridewithgps.com/routes/456",
                 "",
-                "https://mywindsock.com/rwgps/route/456/#forecast=1694015100");
+                "https://mywindsock.com/rwgps/route/456/#forecast=1694015100",
+                "");
 
         Mockito.when(cyclingRouteConverter.convertRoute("https://ridewithgps.com/routes/456", september6th16h45m)).thenReturn(expectedRouteUrls);
 

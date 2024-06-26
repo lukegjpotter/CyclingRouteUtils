@@ -6,38 +6,57 @@ import com.lukegjpotter.tools.cyclingrouteutils.service.CyclingRouteConverterSer
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.MalformedURLException;
+
 @RestController("/")
 public class CyclingRouteController {
 
     private final Logger logger = LoggerFactory.getLogger(CyclingRouteController.class);
+    private final CyclingRouteConverterService converterService;
+
     @Autowired
-    private CyclingRouteConverterService converterService;
+    public CyclingRouteController(CyclingRouteConverterService converterService) {
+        this.converterService = converterService;
+    }
 
     @PostMapping("route")
-    public RouteUrlsRecord convertRoute(@RequestBody RouteAndDateTimeRecord routeAndDateTime) {
-        logger.info("Endpoint Convert Route called");
+    public ResponseEntity<RouteUrlsRecord> convertRoute(@RequestBody RouteAndDateTimeRecord routeAndDateTime) {
+        logger.info("Endpoint Convert Route called with {}", routeAndDateTime);
 
-        return converterService.convertRoute(routeAndDateTime);
+        try {
+            return ResponseEntity.ok(converterService.convertRoute(routeAndDateTime));
+        } catch (MalformedURLException e) {
+            logger.error("Error converting route: {}", e.getMessage());
+            return ResponseEntity.internalServerError().body(new RouteUrlsRecord(
+                    routeAndDateTime.url(),
+                    "",
+                    "",
+                    "The URL is not Correct."));
+        }
     }
 
     @GetMapping("test")
-    public RouteUrlsRecord testJsonOutput() {
-        logger.info("Endpoint Test called");
+    public ResponseEntity<RouteUrlsRecord> testJsonOutput() {
+        logger.trace("Endpoint Test called");
 
-        return new RouteUrlsRecord(
+        RouteUrlsRecord testRecord = new RouteUrlsRecord(
                 "https://www.strava.com/routes/123",
                 "https://www.veloviewer.com/routes/123",
-                "https://mywindsock.com/route/123");
+                "https://mywindsock.com/route/123",
+                null);
+
+        return ResponseEntity.ok(testRecord);
     }
 
-    @GetMapping("health")
-    public String getHealth() {
-        logger.trace("Endpoint health called");
-        return "OK";
+    @GetMapping("/health")
+    public ResponseEntity<String> getHealth() {
+        logger.trace("Endpoint Health called");
+        return ResponseEntity.ok("OK");
     }
 }

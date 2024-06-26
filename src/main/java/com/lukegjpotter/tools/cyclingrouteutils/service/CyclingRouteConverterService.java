@@ -8,14 +8,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.MalformedURLException;
+
 @Service
 public class CyclingRouteConverterService {
 
     private final Logger logger = LoggerFactory.getLogger(CyclingRouteConverterService.class);
-    @Autowired
-    CyclingRouteConverterComponent cyclingRouteConverter;
+    private final CyclingRouteConverterComponent cyclingRouteConverter;
 
-    public RouteUrlsRecord convertRoute(RouteAndDateTimeRecord routeAndDateTime) {
+    @Autowired
+    public CyclingRouteConverterService(CyclingRouteConverterComponent cyclingRouteConverter) {
+        this.cyclingRouteConverter = cyclingRouteConverter;
+    }
+
+    public RouteUrlsRecord convertRoute(RouteAndDateTimeRecord routeAndDateTime) throws MalformedURLException {
         logger.trace("Convert Route");
         return cyclingRouteConverter.convertRoute(routeAndDateTime.url(), routeAndDateTime.dateTime());
     }
