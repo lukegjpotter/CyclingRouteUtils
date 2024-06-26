@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
 
 @RestController("/")
 public class CyclingRouteController {
@@ -31,7 +31,7 @@ public class CyclingRouteController {
 
         try {
             return ResponseEntity.ok(converterService.convertRoute(routeAndDateTime));
-        } catch (MalformedURLException e) {
+        } catch (IOException e) {
             logger.error("Error converting route: {}", e.getMessage());
             return ResponseEntity.internalServerError().body(new RouteUrlsRecord(
                     routeAndDateTime.url(),

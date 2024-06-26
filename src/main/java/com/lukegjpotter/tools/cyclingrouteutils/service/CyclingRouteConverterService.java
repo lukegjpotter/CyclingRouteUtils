@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
 
 @Service
 public class CyclingRouteConverterService {
@@ -21,7 +21,7 @@ public class CyclingRouteConverterService {
         this.cyclingRouteConverter = cyclingRouteConverter;
     }
 
-    public RouteUrlsRecord convertRoute(RouteAndDateTimeRecord routeAndDateTime) throws MalformedURLException {
+    public RouteUrlsRecord convertRoute(RouteAndDateTimeRecord routeAndDateTime) throws IOException {
         logger.trace("Convert Route");
         return cyclingRouteConverter.convertRoute(routeAndDateTime.url(), routeAndDateTime.dateTime());
     }

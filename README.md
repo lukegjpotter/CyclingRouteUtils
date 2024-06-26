@@ -1,12 +1,14 @@
 # Cycling Route Utils
 
 A RESTful Service that takes a Strava Route URL, or a RideWithGPS Route URL, and a DateTime, and returns the VeloViewer
-URL (Strava Route only) and MyWindSock URL with the timecode of the DateTime supplied.
+URL (Strava Route only) and MyWindSock URL with the timecode of the DateTime supplied. It even works with
+Strava.App.Link links.
 
 ### Upcoming Features
 
-Adding Cloud Function/Lambda support.  
-Adding support for Strava App Link Short URLs.
+Adding Cloud Function/Lambda support.
+Adding Rest Assured Endpoints Tests.
+Adding Render and Heroku support.
 
 ### Deploy Buttons
 
@@ -26,11 +28,12 @@ Then it will return
       "sourceRoute":"https://www.strava.com/routes/123",
       "veloViewerRoute":"https://www.veloviewer.com/routes/123",
       "myWindSockRoute":"https://mywindsock.com/route/123/#forecast=1694015100"
+      "error":""
     }
 
 ### How to Build and Run
 
-CLI Gradle & Docker
+CLI Gradle
 
     ./gradlew build bootRun
 

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,7 +18,7 @@ class CyclingRouteConverterComponentTest {
     CyclingRouteConverterComponent cyclingRouteConverter;
 
     @Test
-    public void testConvertRoute_Strava_EmptyDateTime() throws MalformedURLException {
+    public void testConvertRoute_Strava_EmptyDateTime() throws IOException {
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://www.strava.com/routes/123",
                 "https://www.veloviewer.com/routes/123",
@@ -29,22 +30,20 @@ class CyclingRouteConverterComponentTest {
     }
 
     @Test
-    public void testConvertRoute_Strava_DateTime() throws MalformedURLException {
-        String september6th16h45m = "06/09/2023 16:45 IST";
-
+    public void testConvertRoute_Strava_DateTime() throws IOException {
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://www.strava.com/routes/456",
                 "https://www.veloviewer.com/routes/456",
                 "https://mywindsock.com/route/456/#forecast=1694015100",
                 "");
 
-        RouteUrlsRecord actualRouteUrls = cyclingRouteConverter.convertRoute("https://www.strava.com/routes/456", september6th16h45m);
+        RouteUrlsRecord actualRouteUrls = cyclingRouteConverter.convertRoute("https://www.strava.com/routes/456", "06/09/2023 16:45 IST");
 
         assertEquals(expectedRouteUrls, actualRouteUrls);
     }
 
     @Test
-    public void testConvertRoute_RideWithGPS_NullDateTime() throws MalformedURLException {
+    public void testConvertRoute_RideWithGPS_NullDateTime() throws IOException {
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://ridewithgps.com/routes/123",
                 "",
@@ -56,7 +55,7 @@ class CyclingRouteConverterComponentTest {
     }
 
     @Test
-    public void testConvertRoute_RideWithGPS_DateTime() throws MalformedURLException {
+    public void testConvertRoute_RideWithGPS_DateTime() throws IOException {
         String september6th16h45m = "06/09/2023 16:45 IST";
 
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
@@ -71,7 +70,7 @@ class CyclingRouteConverterComponentTest {
     }
 
     @Test
-    public void testConvertRoute_EdgeCase_EmptyRoute() throws MalformedURLException {
+    public void testConvertRoute_EdgeCase_EmptyRoute() throws IOException {
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "",
                 "",
@@ -92,7 +91,7 @@ class CyclingRouteConverterComponentTest {
     }
 
     @Test
-    public void testConvertRoute_EdgeCase_RouteURLStartsWithWww() throws MalformedURLException {
+    public void testConvertRoute_EdgeCase_RouteURLStartsWithWww() throws IOException {
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://www.strava.com/routes/123",
                 "https://www.veloviewer.com/routes/123",
@@ -104,13 +103,25 @@ class CyclingRouteConverterComponentTest {
     }
 
     @Test
-    public void testConvertRoute_EdgeCase_NotStravaOrRideWithGps() throws MalformedURLException {
+    public void testConvertRoute_EdgeCase_NotStravaOrRideWithGps() throws IOException {
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://www.facebook.com/",
                 "",
                 "",
                 "URL is not Strava or RideWithGPS.");
         RouteUrlsRecord actualRouteUrls = cyclingRouteConverter.convertRoute("www.facebook.com/", "");
+
+        assertEquals(expectedRouteUrls, actualRouteUrls);
+    }
+
+    @Test
+    public void testConvertRoute_StravaAppLink() throws IOException {
+        RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
+                "https://www.strava.com/routes/3203050355643790746",
+                "https://www.veloviewer.com/routes/3203050355643790746",
+                "https://mywindsock.com/route/3203050355643790746/#forecast=1694015100",
+                "");
+        RouteUrlsRecord actualRouteUrls = cyclingRouteConverter.convertRoute("https://strava.app.link/7VkQ8ZLsKKb", "06/09/2023 16:45 IST");
 
         assertEquals(expectedRouteUrls, actualRouteUrls);
     }

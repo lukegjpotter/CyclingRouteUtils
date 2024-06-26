@@ -11,7 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.net.MalformedURLException;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -30,7 +30,7 @@ class CyclingRouteConverterServiceTest {
     }
 
     @Test
-    public void testConvertRoute_Strava_NoDateTime() throws MalformedURLException {
+    public void testConvertRoute_Strava_NoDateTime() throws IOException {
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://www.strava.com/routes/123",
                 "https://www.veloviewer.com/routes/123",
@@ -45,7 +45,7 @@ class CyclingRouteConverterServiceTest {
     }
 
     @Test
-    public void testConvertRoute_Strava_DateTime() throws MalformedURLException {
+    public void testConvertRoute_Strava_DateTime() throws IOException {
         String september6th16h45m = "06/09/2023 16:45 IST";
 
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
@@ -62,7 +62,7 @@ class CyclingRouteConverterServiceTest {
     }
 
     @Test
-    public void testConvertRoute_RideWithGPS_NoDateTime() throws MalformedURLException {
+    public void testConvertRoute_RideWithGPS_NoDateTime() throws IOException {
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://ridewithgps.com/routes/123",
                 "",
@@ -77,7 +77,7 @@ class CyclingRouteConverterServiceTest {
     }
 
     @Test
-    public void testConvertRoute_RideWithGPS_DateTime() throws MalformedURLException {
+    public void testConvertRoute_RideWithGPS_DateTime() throws IOException {
         String september6th16h45m = "06/09/2023 16:45 IST";
 
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(

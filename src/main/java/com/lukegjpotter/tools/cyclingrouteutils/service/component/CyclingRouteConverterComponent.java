@@ -1,10 +1,13 @@
 package com.lukegjpotter.tools.cyclingrouteutils.service.component;
 
 import com.lukegjpotter.tools.cyclingrouteutils.dto.RouteUrlsRecord;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.ZonedDateTime;
@@ -15,7 +18,7 @@ public class CyclingRouteConverterComponent {
 
     private final Logger logger = LoggerFactory.getLogger(CyclingRouteConverterComponent.class);
 
-    public RouteUrlsRecord convertRoute(String routeUrl, String dateTimeString) throws MalformedURLException {
+    public RouteUrlsRecord convertRoute(String routeUrl, String dateTimeString) throws IOException {
         logger.trace("Convert Route");
 
         if (routeUrl.isEmpty()) return new RouteUrlsRecord(routeUrl, "", "", "Route URL is empty.");
@@ -27,6 +30,12 @@ public class CyclingRouteConverterComponent {
             new URL(routeUrl);
         } catch (MalformedURLException e) {
             throw new MalformedURLException(e.toString());
+        }
+
+        if (routeUrl.startsWith("https://strava.app.link/") || routeUrl.startsWith("strava.app.link/")) {
+            Document webPage = Jsoup.connect(routeUrl).get();
+            URL location = new URL(webPage.location());
+            routeUrl = location.getProtocol() + "://" + location.getHost() + location.getPath();
         }
 
         String forecastPostfix = "";
