@@ -28,20 +28,19 @@ public class CyclingRouteConverterComponent {
         if (routeUrlString.startsWith("strava.com") || routeUrlString.startsWith("ridewithgps.com"))
             routeUrlString = "https://www." + routeUrlString;
 
-        routeUrlString = routeUrlString.trim();
-
         // Check if Standardised URL is valid.
+        URL routeUrl;
         try {
-            new URL(routeUrlString);
+            routeUrl = new URL(routeUrlString.trim());
         } catch (MalformedURLException e) {
             throw new MalformedURLException(e.toString());
         }
 
         // Resolve Strava.App.Link URLs.
         // It's done this way, as there are no 3xx Redirects and HttpConnection doesn't get the location.
-        if (routeUrlString.startsWith("https://strava.app.link/") || routeUrlString.startsWith("strava.app.link/")) {
-            URL location = new URL(Jsoup.connect(routeUrlString).get().location());
-            routeUrlString = location.getProtocol() + "://" + location.getHost() + location.getPath();
+        if (routeUrl.getHost().contains("strava.app.link")) {
+            URL locationUrl = new URL(Jsoup.connect(routeUrl.toString()).get().location());
+            routeUrl = new URL(locationUrl.getProtocol() + "://" + locationUrl.getHost() + locationUrl.getPath());
         }
 
         // Apply the MyWindSock Date and Time Query String.
@@ -49,64 +48,28 @@ public class CyclingRouteConverterComponent {
         String forecastPostfix = "";
         if (dateTimeString == null) dateTimeString = "";
 
-        dateTimeString = dateTimeString.trim();
         if (!dateTimeString.isEmpty()) {
             try {
-                forecastPostfix = convertDateTimeToMyWindSockForecastPostfix(dateTimeString);
+                forecastPostfix = "/#forecast=" + ZonedDateTime.from(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm z")
+                        .parse(dateTimeString.trim())).toEpochSecond();
             } catch (DateTimeParseException dtpe) {
-                forecastPostfix = "";
                 errorMessage = "ZonedDateTime format is incorrect. Please use 'dd/MM/yyyy HH:mm z', for example '31/12/2024 23:59 IST'. You supplied '" + dateTimeString + "'.";
             }
         }
 
-        int substringBeginIndex = determineSubstringBeginIndex(routeUrlString);
-
-        // Fix Me: Use URL object here.
-        String veloViewerURL = "", myWindSockURL = "";
-        String hostname = routeUrlString.substring(substringBeginIndex);
-
         // Populate VeloViewer and MyWindSock URLs.
-        if (hostname.startsWith("strava.com")) {
-            String urlPath = hostname.substring("strava.com/routes/".length());
-            veloViewerURL = "https://www.veloviewer.com/routes/" + urlPath;
-            myWindSockURL = "https://mywindsock.com/route/" + urlPath + forecastPostfix;
-        } else if (hostname.startsWith("ridewithgps.com")) {
-            String urlPath = hostname.substring("ridewithgps.com/routes/".length());
-            myWindSockURL = "https://mywindsock.com/rwgps/route/" + urlPath + forecastPostfix;
+        String veloViewerUrlString = "", myWindSockUrlString = "";
+        if (routeUrl.getHost().contains("strava.com")) {
+            String routeCode = routeUrl.getPath().substring("/routes/".length());
+            veloViewerUrlString = "https://www.veloviewer.com/routes/" + routeCode;
+            myWindSockUrlString = "https://mywindsock.com/route/" + routeCode + forecastPostfix;
+        } else if (routeUrl.getHost().contains("ridewithgps.com")) {
+            String routeCode = routeUrl.getPath().substring("/routes/".length());
+            myWindSockUrlString = "https://mywindsock.com/rwgps/route/" + routeCode + forecastPostfix;
         } else {
             errorMessage = "URL is not Strava or RideWithGPS.";
         }
 
-        return new RouteUrlsRecord(routeUrlString, veloViewerURL, myWindSockURL, errorMessage);
-    }
-
-    private String convertDateTimeToMyWindSockForecastPostfix(String dateTimeString) {
-
-        try {
-            ZonedDateTime zonedDateTime = ZonedDateTime
-                    .from(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm z")
-                            .parse(dateTimeString));
-            return "/#forecast=" + zonedDateTime.toEpochSecond();
-        } catch (DateTimeParseException dtpe) {
-            logger.warn("Time is wrong. {}", dtpe.getMessage());
-            throw dtpe;
-        }
-    }
-
-    private int determineSubstringBeginIndex(String routeUrl) {
-        int substringBeginIndex = 0;
-
-        if (routeUrl.startsWith("https://www.")) {
-            substringBeginIndex = "https://www.".length();
-        } else if (routeUrl.startsWith("http://www.")) {
-            substringBeginIndex = "http://www.".length();
-        } else if (routeUrl.startsWith("www.")) {
-            substringBeginIndex = "www.".length();
-        } else if (routeUrl.startsWith("https://")) {
-            substringBeginIndex = "https://".length();
-        } else if (routeUrl.startsWith("http://")) {
-            substringBeginIndex = "http://".length();
-        }
-        return substringBeginIndex;
+        return new RouteUrlsRecord(routeUrl.toString(), veloViewerUrlString, myWindSockUrlString, errorMessage);
     }
 }
