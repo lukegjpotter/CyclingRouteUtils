@@ -43,6 +43,19 @@ class CyclingRouteConverterComponentTest {
     }
 
     @Test
+    public void testConvertRoute_Strava_IncorrectFormatForDateTime() throws IOException {
+        RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
+                "https://www.strava.com/routes/456",
+                "https://www.veloviewer.com/routes/456",
+                "https://mywindsock.com/route/456",
+                "ZonedDateTime format is incorrect. Please use 'dd/MM/yyyy HH:mm z', for example '31/12/2024 23:59 IST'. You supplied 'Ligma'.");
+
+        RouteUrlsRecord actualRouteUrls = cyclingRouteConverter.convertRoute("https://www.strava.com/routes/456", "Ligma");
+
+        assertEquals(expectedRouteUrls, actualRouteUrls);
+    }
+
+    @Test
     public void testConvertRoute_RideWithGPS_NullDateTime() throws IOException {
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://ridewithgps.com/routes/123",
