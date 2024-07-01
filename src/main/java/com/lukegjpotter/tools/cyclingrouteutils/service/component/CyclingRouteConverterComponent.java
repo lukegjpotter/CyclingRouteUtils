@@ -50,6 +50,7 @@ public class CyclingRouteConverterComponent {
 
         if (!dateTimeString.isEmpty()) {
             try {
+                // FixMe: The IST code is not factoring in when the clocks change.
                 forecastPostfix = "/#forecast=" + ZonedDateTime.from(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm z")
                         .parse(dateTimeString.trim())).toEpochSecond();
             } catch (DateTimeParseException dtpe) {
