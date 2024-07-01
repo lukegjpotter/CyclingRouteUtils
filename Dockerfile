@@ -10,7 +10,6 @@ WORKDIR $APP_HOME
 # Copy the Gradle build and Source code files to the Build Stage Container.
 COPY . $APP_HOME/
 # Build the project with the Repository's Gradle.
-#CMD ["./gradlew", "clean", "build"]
 RUN ./gradlew clean build -x test
 
 #
@@ -20,8 +19,6 @@ RUN ./gradlew clean build -x test
 FROM eclipse-temurin:17-jdk-alpine AS runstage
 ENV APP_HOME=/app
 LABEL author="lukegjpotter"
-# Create a Volume to persist the JAR file.
-#VOLUME $APP_HOME
 # Copy the Build Stage JAR file to the Run Stage Container Volume.
 COPY --from=buildstage $APP_HOME/build/libs/cycling-route-utils-0.0.1-SNAPSHOT.jar $APP_HOME/cycling-route-utils.jar
 # Set the working directory to /app, so we don't need to prefix the CMD Layer with /app.
