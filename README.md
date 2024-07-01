@@ -18,11 +18,15 @@ Coming Soon: Heroku, Railways, Amazon Lambda
 
 ### How to Use
 
+Optional: Install JSON to format/pretty print the Response.
+
+    sudo npm i -g json
+
 Curl instructions
 
     curl -X POST localhost:8080/route \
          -H 'Content-type:application/json' \
-         -d '{"url": "https://www.strava.com/routes/123", "dateTime": "06/09/2023 16:45 IST"}'
+         -d '{"url": "https://www.strava.com/routes/123", "dateTime": "06/09/2023 16:45 IST"}' | json
 
 Then it will return
 
@@ -54,9 +58,10 @@ CLI Gradle
 
 Docker CLI Instructions
 
-    docker build -t cycling-route-utils:latest .
+    docker build --pull -t cycling-route-utils:latest .
     
     docker run --name cycling_route_utils \
       -p 8080:8080 \
       -d --rm cycling-route-utils:latest
 
+Then you can run the `curl` command above.
