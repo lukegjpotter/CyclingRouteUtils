@@ -5,6 +5,8 @@
 # Use JDK runtime as a parent image. Gradle Zip and Deamon still takes time to download and start.
 FROM eclipse-temurin:17-jdk-alpine AS buildstage
 ENV APP_HOME=/app
+# Create a Volume to persist the JAR file.
+VOLUME $APP_HOME
 # Set the working directory to /app.
 WORKDIR $APP_HOME
 # Copy the Gradle build and Source code files to the Build Stage Container.
