@@ -26,7 +26,7 @@ Curl instructions
 
     curl -X POST localhost:8080/route \
          -H 'Content-type:application/json' \
-         -d '{"url": "https://www.strava.com/routes/123", "dateTime": "06/09/2023 16:45 IST"}' | json
+         -d '{"url": "https://www.strava.com/routes/123", "dateTime": "06/09/2023 16:45 Europe/Dublin"}' | json
 
 Then it will return
 

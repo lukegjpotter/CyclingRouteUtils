@@ -50,11 +50,10 @@ public class CyclingRouteConverterComponent {
 
         if (!dateTimeString.isEmpty()) {
             try {
-                // FixMe: The IST code is not factoring in when the clocks change.
-                forecastPostfix = "/#forecast=" + ZonedDateTime.from(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm z")
+                forecastPostfix = "/#forecast=" + ZonedDateTime.from(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm zzz")
                         .parse(dateTimeString.trim())).toEpochSecond();
             } catch (DateTimeParseException dtpe) {
-                errorMessage = "ZonedDateTime format is incorrect. Please use 'dd/MM/yyyy HH:mm z', for example '31/12/2024 23:59 IST'. You supplied '" + dateTimeString + "'.";
+                errorMessage = "ZonedDateTime format is incorrect. Please use 'dd/MM/yyyy HH:mm zzz', for example '31/12/2024 23:59 IST'. You supplied '" + dateTimeString + "'.";
             }
         }
 
