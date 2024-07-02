@@ -32,8 +32,9 @@ public class CyclingRouteConverterComponent {
         URL routeUrl;
         try {
             routeUrl = new URL(routeUrlString.trim());
-        } catch (MalformedURLException e) {
-            throw new MalformedURLException(e.toString());
+        } catch (MalformedURLException mue) {
+            logger.error("Error Converting Route. {}", mue.getMessage());
+            throw mue;
         }
 
         // Resolve Strava.App.Link URLs.
@@ -57,7 +58,8 @@ public class CyclingRouteConverterComponent {
                 forecastPostfix = "/#forecast=" + ZonedDateTime.from(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm zzz")
                         .parse(dateTimeString.trim())).toEpochSecond();
             } catch (DateTimeParseException dtpe) {
-                errorMessage = "ZonedDateTime format is incorrect. Please use 'dd/MM/yyyy HH:mm zzz', for example '31/12/2024 23:59 IST'. You supplied '" + dateTimeString + "'.";
+                // Don't throw the DTPE, as we can still give the user the route URLs, along with the message.
+                errorMessage = "ZonedDateTime format is incorrect. Please use 'dd/MM/yyyy HH:mm zzz', for example '31/12/2024 23:59 Europe/Dublin'. You supplied '" + dateTimeString + "'.";
             }
         }
 

@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.time.format.DateTimeParseException;
 
 @RestController("/")
 public class CyclingRouteController {
@@ -36,19 +34,14 @@ public class CyclingRouteController {
             RouteUrlsRecord routeUrlsRecord = converterService.convertRoute(routeAndDateTime);
             if (routeUrlsRecord.errorMessage().isEmpty()) return ResponseEntity.ok(routeUrlsRecord);
             else return ResponseEntity.internalServerError().body(routeUrlsRecord);
-        } catch (MalformedURLException mue) {
-            errorMessage = "URL is not Strava or RideWithGPS.";
-        } catch (DateTimeParseException dtpe) {
-            errorMessage = "The URL is not Correct.";
-        } catch (IOException e) {
-            logger.error("Error converting route: {}", e.getMessage());
-            errorMessage = "Error converting route.";
+        } catch (IOException ioe) {
+            logger.error("Error converting route: {}", ioe.getMessage());
+            return ResponseEntity.internalServerError().body(new RouteUrlsRecord(
+                    routeAndDateTime.url(),
+                    "",
+                    "",
+                    "URL is not Strava or RideWithGPS."));
         }
-        return ResponseEntity.internalServerError().body(new RouteUrlsRecord(
-                routeAndDateTime.url(),
-                "",
-                "",
-                errorMessage));
     }
 
     @GetMapping("test")

@@ -221,7 +221,7 @@ public class CyclingRouteControllerTest {
                 .body("sourceRoute", equalTo("https://www.strava.com/routes/123"),
                         "veloViewerRoute", equalTo("https://www.veloviewer.com/routes/123"),
                         "myWindSockRoute", equalTo("https://mywindsock.com/route/123"),
-                        "errorMessage", equalTo("ZonedDateTime format is incorrect. Please use 'dd/MM/yyyy HH:mm zzz', for example '31/12/2024 23:59 IST'. You supplied 'Ligma'."));
+                        "errorMessage", equalTo("ZonedDateTime format is incorrect. Please use 'dd/MM/yyyy HH:mm zzz', for example '31/12/2024 23:59 Europe/Dublin'. You supplied 'Ligma'."));
     }
 
     @Test
