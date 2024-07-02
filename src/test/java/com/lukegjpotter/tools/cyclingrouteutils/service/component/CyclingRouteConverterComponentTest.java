@@ -48,7 +48,7 @@ class CyclingRouteConverterComponentTest {
                 "https://www.strava.com/routes/456",
                 "https://www.veloviewer.com/routes/456",
                 "https://mywindsock.com/route/456",
-                "ZonedDateTime format is incorrect. Please use 'dd/MM/yyyy HH:mm z', for example '31/12/2024 23:59 IST'. You supplied 'Ligma'.");
+                "ZonedDateTime format is incorrect. Please use 'dd/MM/yyyy HH:mm zzz', for example '31/12/2024 23:59 Europe/Dublin'. You supplied 'Ligma'.");
 
         RouteUrlsRecord actualRouteUrls = cyclingRouteConverter.convertRoute("https://www.strava.com/routes/456", "Ligma");
 
@@ -100,7 +100,7 @@ class CyclingRouteConverterComponentTest {
                 MalformedURLException.class,
                 () -> cyclingRouteConverter.convertRoute("123", null));
 
-        assertEquals("java.net.MalformedURLException: no protocol: 123", exception.getMessage());
+        assertEquals("no protocol: 123", exception.getMessage());
     }
 
     @Test
