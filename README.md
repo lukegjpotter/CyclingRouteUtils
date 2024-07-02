@@ -7,8 +7,7 @@ Strava.App.Link links.
 ### Upcoming Features
 
 Adding Cloud Function/Lambda support.
-Adding Rest Assured Endpoints Tests.
-Adding Render and Heroku support.
+Adding Heroku support.
 
 ### Deploy Buttons
 
@@ -48,7 +47,9 @@ Swagger Instructions
 
 When the Service is running, you can add `/swagger-ui/index.html` to your host URL and execute requests from there.
 
-Swagger UI: [on Localhost](http://localhost:8080/swagger-ui/index.html).
+Swagger UI: [on Localhost](http://localhost:8080/swagger-ui/index.html)
+or [on Render](https://cyclingrouteutils.onrender.com/swagger-ui/index.html)
+(give it about 50 seconds to start up).
 
 ### How to Build and Run
 
