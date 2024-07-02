@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.time.format.DateTimeParseException;
 
 @RestController("/")
 public class CyclingRouteController {
@@ -29,17 +31,24 @@ public class CyclingRouteController {
     public ResponseEntity<RouteUrlsRecord> convertRoute(@RequestBody RouteAndDateTimeRecord routeAndDateTime) {
         logger.info("Endpoint Convert Route called with {}", routeAndDateTime);
 
+        String errorMessage;
         try {
-            return ResponseEntity.ok(converterService.convertRoute(routeAndDateTime));
+            RouteUrlsRecord routeUrlsRecord = converterService.convertRoute(routeAndDateTime);
+            if (routeUrlsRecord.errorMessage().isEmpty()) return ResponseEntity.ok(routeUrlsRecord);
+            else return ResponseEntity.internalServerError().body(routeUrlsRecord);
+        } catch (MalformedURLException mue) {
+            errorMessage = "URL is not Strava or RideWithGPS.";
+        } catch (DateTimeParseException dtpe) {
+            errorMessage = "The URL is not Correct.";
         } catch (IOException e) {
             logger.error("Error converting route: {}", e.getMessage());
-            return ResponseEntity.internalServerError().body(new RouteUrlsRecord(
-                    routeAndDateTime.url(),
-                    "",
-                    "",
-                    "The URL is not Correct."));
-            // FixMe: If the date format is not correct, the URL message is given back, when it should be the date message.
+            errorMessage = "Error converting route.";
         }
+        return ResponseEntity.internalServerError().body(new RouteUrlsRecord(
+                routeAndDateTime.url(),
+                "",
+                "",
+                errorMessage));
     }
 
     @GetMapping("test")
@@ -50,12 +59,12 @@ public class CyclingRouteController {
                 "https://www.strava.com/routes/123",
                 "https://www.veloviewer.com/routes/123",
                 "https://mywindsock.com/route/123",
-                null);
+                "");
 
         return ResponseEntity.ok(testRecord);
     }
 
-    @GetMapping("/health")
+    @GetMapping("health")
     public ResponseEntity<String> getHealth() {
         logger.trace("Endpoint Health called");
         return ResponseEntity.ok("OK");

@@ -43,12 +43,16 @@ public class CyclingRouteConverterComponent {
             routeUrl = new URL(locationUrl.getProtocol() + "://" + locationUrl.getHost() + locationUrl.getPath());
         }
 
+        if (!routeUrl.getHost().contains("strava.com") && !routeUrl.getHost().contains("ridewithgps.com")) {
+            return new RouteUrlsRecord(routeUrl.toString(), "", "", "URL is not Strava or RideWithGPS.");
+        }
+
         // Apply the MyWindSock Date and Time Query String.
         String errorMessage = "";
         String forecastPostfix = "";
         if (dateTimeString == null) dateTimeString = "";
 
-        if (!dateTimeString.isEmpty()) {
+        if (!dateTimeString.isEmpty() && (routeUrl.getHost().contains("strava.com") || routeUrl.getHost().contains("ridewithgps.com"))) {
             try {
                 forecastPostfix = "/#forecast=" + ZonedDateTime.from(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm zzz")
                         .parse(dateTimeString.trim())).toEpochSecond();
