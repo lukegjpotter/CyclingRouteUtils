@@ -17,6 +17,8 @@ Coming Soon: Heroku, Railways, Amazon Lambda
 
 ### How to Use
 
+#### Command Line
+
 Optional: Install JSON to format/pretty print the Response.
 
     sudo npm i -g json
@@ -36,12 +38,18 @@ Then it will return
       "error":""
     }
 
+#### Postman REST Client
+
 PostMan Instructions
 
 You can use this Collection to run the REST Requests. You can change the hostname and the body contents, to suit your
 Cloud instance or Route URL and Time.
 
-Collection: [for testing on Localhost](https://www.postman.com/bold-moon-552911/workspace/cyclingrouteutils/collection/3947605-dfff5988-bae7-479c-9a3d-9045ce20eae1?action=share&creator=3947605).
+Postman Collection: [prefilled JSON bodies](https://www.postman.com/bold-moon-552911/workspace/cyclingrouteutils/collection/3947605-dfff5988-bae7-479c-9a3d-9045ce20eae1?action=share&creator=3947605).
+
+In this Collection, you'll need to set the Environment (top-right where it says "No Environment", click that). The Collection already has Environments for localhost and the service's live deployment on Render (give it about 50 seconds to start-up for your first request, so maybe just send a request to the `/health` endpoint first, to wake up the instance, and it'll be rapid response after that). The Collection also has prefilled JSON bodies, to ensure that you get the correct `ZonedDateTime` format and the Route URL.
+
+#### Swagger UI (SpringDoc-OpenApi)
 
 Swagger Instructions
 
@@ -65,4 +73,4 @@ Docker CLI Instructions
       -p 8080:8080 \
       -d --rm cycling-route-utils:latest
 
-Then you can run the `curl` command above.
+Then you can run the `curl` command, or Postman with Localhost Environment, or the Swagger-UI on Localhost, from the "How to Use" instructions above.
