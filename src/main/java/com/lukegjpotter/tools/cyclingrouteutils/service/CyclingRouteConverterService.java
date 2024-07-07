@@ -14,7 +14,7 @@ public class CyclingRouteConverterService {
 
     private final Logger logger = LoggerFactory.getLogger(CyclingRouteConverterService.class);
     private final CyclingRouteConverterComponent cyclingRouteConverter;
-    
+
     public CyclingRouteConverterService(CyclingRouteConverterComponent cyclingRouteConverter) {
         this.cyclingRouteConverter = cyclingRouteConverter;
     }

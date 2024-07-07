@@ -1,8 +1,8 @@
 # Cycling Route Utils
 
-A RESTful Service that takes a Strava Route URL, or a RideWithGPS Route URL, and a DateTime, and returns the VeloViewer
-URL (Strava Route only) and MyWindSock URL with the timecode of the DateTime supplied. It even works with
-Strava.App.Link links.
+A RESTful Service that takes a Strava Segment URL, Strava Route URL, or a RideWithGPS Route URL, and a DateTime, and
+returns the VeloViewer URL (Strava only) and MyWindSock URL with the timecode of the DateTime supplied. It even works
+with Strava.App.Link links.
 
 ### Upcoming Features
 
@@ -23,6 +23,8 @@ Optional: Install JSON to format/pretty print the Response.
 
     sudo npm i -g json
 
+#### Route Endpoint
+
 Curl instructions
 
     curl -X POST localhost:8080/route \
@@ -36,6 +38,22 @@ Then it will return
       "veloViewerRoute":"https://www.veloviewer.com/routes/123",
       "myWindSockRoute":"https://mywindsock.com/route/123/#forecast=1694015100"
       "error":""
+    }
+
+#### Segment Endpoint
+
+Curl instructions
+
+    curl -X POST localhost:8080/segment \
+         -H 'Content-type:application/json' \
+         -d '{"stravaSegment": "https://www.strava.com/segments/22191150"}' | json
+
+Then it will return
+
+    {
+      "stravaSegment": "https://www.strava.com/segments/22191150",
+      "veloViewerSegment": "https://www.veloviewer.com/segments/22191150",
+      "errorMessage": ""
     }
 
 #### Postman REST Client
