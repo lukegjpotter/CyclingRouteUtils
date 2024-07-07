@@ -5,7 +5,6 @@ import com.lukegjpotter.tools.cyclingrouteutils.dto.RouteUrlsRecord;
 import com.lukegjpotter.tools.cyclingrouteutils.service.CyclingRouteConverterService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,18 +13,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
-@RestController("/")
+@RestController
 public class CyclingRouteController {
 
     private final Logger logger = LoggerFactory.getLogger(CyclingRouteController.class);
     private final CyclingRouteConverterService converterService;
 
-    @Autowired
     public CyclingRouteController(CyclingRouteConverterService converterService) {
         this.converterService = converterService;
     }
 
-    @PostMapping("route")
+    @PostMapping("/route")
     public ResponseEntity<RouteUrlsRecord> convertRoute(@RequestBody RouteAndDateTimeRecord routeAndDateTime) {
         logger.info("Endpoint Convert Route called with {}", routeAndDateTime);
 
@@ -44,7 +42,7 @@ public class CyclingRouteController {
         }
     }
 
-    @GetMapping("test")
+    @GetMapping("/test")
     public ResponseEntity<RouteUrlsRecord> testJsonOutput() {
         logger.trace("Endpoint Test called");
 
@@ -57,7 +55,7 @@ public class CyclingRouteController {
         return ResponseEntity.ok(testRecord);
     }
 
-    @GetMapping("health")
+    @GetMapping("/health")
     public ResponseEntity<String> getHealth() {
         logger.trace("Endpoint Health called");
         return ResponseEntity.ok("OK");
