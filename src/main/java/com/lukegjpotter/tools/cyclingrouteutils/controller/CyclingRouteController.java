@@ -3,7 +3,7 @@ package com.lukegjpotter.tools.cyclingrouteutils.controller;
 import com.lukegjpotter.tools.cyclingrouteutils.dto.RouteAndDateTimeRecord;
 import com.lukegjpotter.tools.cyclingrouteutils.dto.RouteUrlsRecord;
 import com.lukegjpotter.tools.cyclingrouteutils.service.CyclingRouteConverterService;
-import com.lukegjpotter.tools.cyclingrouteutils.service.JsonToHtmlService;
+import com.lukegjpotter.tools.cyclingrouteutils.service.RecordToHtmlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -19,25 +19,25 @@ public class CyclingRouteController {
 
     private final Logger logger = LoggerFactory.getLogger(CyclingRouteController.class);
     private final CyclingRouteConverterService converterService;
-    private final JsonToHtmlService jsonToHtmlService;
+    private final RecordToHtmlService recordToHtmlService;
 
-    public CyclingRouteController(CyclingRouteConverterService converterService, JsonToHtmlService jsonToHtmlService) {
+    public CyclingRouteController(CyclingRouteConverterService converterService, RecordToHtmlService recordToHtmlService) {
         this.converterService = converterService;
-        this.jsonToHtmlService = jsonToHtmlService;
+        this.recordToHtmlService = recordToHtmlService;
     }
 
     @PostMapping("/route")
     public ResponseEntity<RouteUrlsRecord> convertRoute(@RequestBody RouteAndDateTimeRecord routeAndDateTime) {
         logger.info("Endpoint Convert Route called with {}", routeAndDateTime);
 
-        String errorMessage;
         try {
             RouteUrlsRecord routeUrlsRecord = converterService.convertRoute(routeAndDateTime);
+
             if (routeUrlsRecord.errorMessage().isEmpty()) return ResponseEntity.ok(routeUrlsRecord);
             else return ResponseEntity.internalServerError().body(routeUrlsRecord);
         } catch (IOException ioe) {
             logger.error("Error converting route: {}", ioe.getMessage());
-            return ResponseEntity.internalServerError().body(new RouteUrlsRecord(
+            return ResponseEntity.badRequest().body(new RouteUrlsRecord(
                     routeAndDateTime.url(),
                     "",
                     "",
@@ -47,19 +47,26 @@ public class CyclingRouteController {
 
     @PostMapping("/route/html")
     public ResponseEntity<String> convertRouteToHtml(@RequestBody RouteAndDateTimeRecord routeAndDateTime) {
-        RouteUrlsRecord routeUrlsRecord;
-        try {
-            routeUrlsRecord = converterService.convertRoute(routeAndDateTime);
-        } catch (IOException e) {
-            return ResponseEntity.internalServerError().body("<html><body><p>Error</p></body></html>");
-        }
+        logger.info("Endpoint Convert Route to HTML called with {}", routeAndDateTime);
+
+        RouteUrlsRecord routeUrlsRecord = convertRoute(routeAndDateTime).getBody();
+
         if (!routeUrlsRecord.errorMessage().isEmpty()) {
-            return ResponseEntity.internalServerError().body("<html><body><p>Error</p></body></html>");
+            return ResponseEntity.badRequest().body(String.format("""
+                    <html>
+                        <head>
+                            <style>body {font-family: Arial, Helvetica, sans-serif;}</style>
+                            <title>Error</title>
+                        </head>
+                        <body>
+                            <p>Error: %s</p>
+                            <p>%s</p>
+                        </body>
+                    </html>
+                    """, routeUrlsRecord.errorMessage(), routeUrlsRecord));
         }
 
-        String html = jsonToHtmlService.convertRoute(routeUrlsRecord);
-
-        return ResponseEntity.ok(html);
+        return ResponseEntity.ok(recordToHtmlService.convertRoute(routeUrlsRecord));
     }
 
     @GetMapping("/test")
