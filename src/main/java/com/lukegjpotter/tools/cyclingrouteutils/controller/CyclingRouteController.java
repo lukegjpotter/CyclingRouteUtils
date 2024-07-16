@@ -3,6 +3,7 @@ package com.lukegjpotter.tools.cyclingrouteutils.controller;
 import com.lukegjpotter.tools.cyclingrouteutils.dto.RouteAndDateTimeRecord;
 import com.lukegjpotter.tools.cyclingrouteutils.dto.RouteUrlsRecord;
 import com.lukegjpotter.tools.cyclingrouteutils.service.CyclingRouteConverterService;
+import com.lukegjpotter.tools.cyclingrouteutils.service.JsonToHtmlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +19,11 @@ public class CyclingRouteController {
 
     private final Logger logger = LoggerFactory.getLogger(CyclingRouteController.class);
     private final CyclingRouteConverterService converterService;
+    private final JsonToHtmlService jsonToHtmlService;
 
-    public CyclingRouteController(CyclingRouteConverterService converterService) {
+    public CyclingRouteController(CyclingRouteConverterService converterService, JsonToHtmlService jsonToHtmlService) {
         this.converterService = converterService;
+        this.jsonToHtmlService = jsonToHtmlService;
     }
 
     @PostMapping("/route")
@@ -40,6 +43,23 @@ public class CyclingRouteController {
                     "",
                     "URL is not Strava or RideWithGPS."));
         }
+    }
+
+    @PostMapping("/route/html")
+    public ResponseEntity<String> convertRouteToHtml(@RequestBody RouteAndDateTimeRecord routeAndDateTime) {
+        RouteUrlsRecord routeUrlsRecord;
+        try {
+            routeUrlsRecord = converterService.convertRoute(routeAndDateTime);
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().body("<html><body><p>Error</p></body></html>");
+        }
+        if (!routeUrlsRecord.errorMessage().isEmpty()) {
+            return ResponseEntity.internalServerError().body("<html><body><p>Error</p></body></html>");
+        }
+
+        String html = jsonToHtmlService.convertRoute(routeUrlsRecord);
+
+        return ResponseEntity.ok(html);
     }
 
     @GetMapping("/test")
