@@ -23,7 +23,7 @@ Optional: Install JSON to format/pretty print the Response.
 
     sudo npm i -g json
 
-#### Route Endpoint
+##### Route Endpoint
 
 Curl instructions
 
@@ -40,7 +40,7 @@ Then it will return
       "error":""
     }
 
-#### Segment Endpoint
+##### Segment Endpoint
 
 Curl instructions
 
@@ -56,6 +56,35 @@ Then it will return
       "errorMessage": ""
     }
 
+##### Route HTML Endpoint
+
+The `/route/html` Endpoint. This will return HTML instead of JSON. The benefit is that, if you execute this Endpoint in
+Postman, and choose the "Preview" option for the Response, you can copy and paste the contents straight into a Spread
+Sheet for route planning or stage race logistics. In the PostMan Collection below, the "Strava Route HTML" and
+"RideWithGPS Route HTML" requests are ready to call the `/route/html` Endpoint and provide some easily
+copy-and-paste-able response in Postman's Preview Response pane.
+
+Curl Instructions
+
+    curl -X POST http://localhost:8080/route/html \
+         -H 'accept: */*' \
+         -H 'Content-Type: application/json' \
+         -d '{ "url": "https://www.strava.com/routes/123", "dateTime": "14/07/2024 10:50 Europe/Dublin" }'
+
+Then it will return
+
+    <html>
+      <head>
+        <style>body {font-family: Arial, Helvetica, sans-serif;}</style>
+        <title>Route URLs</title>
+      </head>
+      <body>
+        <a href="https://www.strava.com/routes/123">Strava</a><br />
+        <a href="https://www.veloviewer.com/routes/123">VeloViewer</a><br />
+        <a href="https://mywindsock.com/route/123/#forecast=1720950600">MyWindSock</a>
+      </body>
+    </html>
+
 #### Postman REST Client
 
 PostMan Instructions
@@ -65,7 +94,11 @@ Cloud instance or Route URL and Time.
 
 Postman Collection: [prefilled JSON bodies](https://www.postman.com/bold-moon-552911/workspace/cyclingrouteutils/collection/3947605-dfff5988-bae7-479c-9a3d-9045ce20eae1?action=share&creator=3947605).
 
-In this Collection, you'll need to set the Environment (top-right where it says "No Environment", click that). The Collection already has Environments for localhost and the service's live deployment on Render (give it about 50 seconds to start-up for your first request, so maybe just send a request to the `/health` endpoint first, to wake up the instance, and it'll be rapid response after that). The Collection also has prefilled JSON bodies, to ensure that you get the correct `ZonedDateTime` format and the Route URL.
+In this Collection, you'll need to set the Environment (top-right where it says "No Environment", click that). The
+Collection already has Environments for localhost and the service's live deployment on Render (give it about 50 seconds
+to start-up for your first request, so maybe just send a request to the `/health` endpoint first, to wake up the
+instance, and it'll be rapid response after that). The Collection also has prefilled JSON bodies, to ensure that you
+get the correct `ZonedDateTime` format and the Route URL.
 
 #### Swagger UI (SpringDoc-OpenApi)
 
@@ -91,4 +124,5 @@ Docker CLI Instructions
       -p 8080:8080 \
       -d --rm cycling-route-utils:latest
 
-Then you can run the `curl` command, or Postman with Localhost Environment, or the Swagger-UI on Localhost, from the "How to Use" instructions above.
+Then you can run the `curl` command, or Postman with Localhost Environment, or the Swagger-UI on Localhost, from the
+"How to Use" instructions above.
