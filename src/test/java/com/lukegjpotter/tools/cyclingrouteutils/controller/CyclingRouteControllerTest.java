@@ -187,7 +187,7 @@ public class CyclingRouteControllerTest {
                 .when()
                 .post("/route")
                 .then()
-                .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("sourceRoute", equalTo("facebook.com"),
                         "veloViewerRoute", emptyOrNullString(),
                         "myWindSockRoute", emptyOrNullString(),
@@ -202,7 +202,7 @@ public class CyclingRouteControllerTest {
                 .when()
                 .post("/route")
                 .then()
-                .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("sourceRoute", equalTo("https://www.facebook.com"),
                         "veloViewerRoute", emptyOrNullString(),
                         "myWindSockRoute", emptyOrNullString(),
@@ -217,7 +217,7 @@ public class CyclingRouteControllerTest {
                 .when()
                 .post("/route")
                 .then()
-                .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("sourceRoute", equalTo("https://www.strava.com/routes/123"),
                         "veloViewerRoute", equalTo("https://www.veloviewer.com/routes/123"),
                         "myWindSockRoute", equalTo("https://mywindsock.com/route/123"),
@@ -232,7 +232,7 @@ public class CyclingRouteControllerTest {
                 .when()
                 .post("/route")
                 .then()
-                .statusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR)
+                .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("sourceRoute", equalTo("horse"),
                         "veloViewerRoute", emptyOrNullString(),
                         "myWindSockRoute", emptyOrNullString(),

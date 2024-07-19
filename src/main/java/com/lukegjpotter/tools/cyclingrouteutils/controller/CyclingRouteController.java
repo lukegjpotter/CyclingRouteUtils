@@ -34,7 +34,7 @@ public class CyclingRouteController {
             RouteUrlsRecord routeUrlsRecord = converterService.convertRoute(routeAndDateTime);
 
             if (routeUrlsRecord.errorMessage().isEmpty()) return ResponseEntity.ok(routeUrlsRecord);
-            else return ResponseEntity.internalServerError().body(routeUrlsRecord);
+            else return ResponseEntity.badRequest().body(routeUrlsRecord);
         } catch (IOException ioe) {
             logger.error("Error converting route: {}", ioe.getMessage());
             return ResponseEntity.badRequest().body(new RouteUrlsRecord(

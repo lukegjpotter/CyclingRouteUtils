@@ -3,19 +3,22 @@ package com.lukegjpotter.tools.cyclingrouteutils.service;
 import com.lukegjpotter.tools.cyclingrouteutils.dto.SegmentRecord;
 import com.lukegjpotter.tools.cyclingrouteutils.dto.SegmentUrlsRecord;
 import com.lukegjpotter.tools.cyclingrouteutils.exceptions.NotSupportedSiteUrlException;
-import org.jsoup.Jsoup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 @Service
 public class SegmentConverterService {
 
     private final Logger logger = LoggerFactory.getLogger(SegmentConverterService.class);
+    private final UrlNormalisationService urlNormalisationService;
+
+    public SegmentConverterService(UrlNormalisationService urlNormalisationService) {
+        this.urlNormalisationService = urlNormalisationService;
+    }
 
     public SegmentUrlsRecord convertSegment(SegmentRecord segmentRecord) throws IOException, NotSupportedSiteUrlException {
 
@@ -23,25 +26,17 @@ public class SegmentConverterService {
         String httpProtocolString = "http://";
         if (segmentRecord.stravaSegment().startsWith(httpProtocolString))
             segmentRecord = new SegmentRecord("https://" + segmentRecord.stravaSegment().substring(httpProtocolString.length()));
-        String https = (segmentRecord.stravaSegment().startsWith("https")) ? segmentRecord.stravaSegment() : "https://" + segmentRecord.stravaSegment();
 
-        URL segmentUrl;
-        try {
-            segmentUrl = new URL(https);
-        } catch (MalformedURLException e) {
-            throw new MalformedURLException("The URL is not correctly formed");
-        }
+        String httpsPrefixedSegmentUrlString = (segmentRecord.stravaSegment().startsWith("https")) ? segmentRecord.stravaSegment() : "https://" + segmentRecord.stravaSegment();
+
+        URL segmentUrl = urlNormalisationService.validUrlCheck(httpsPrefixedSegmentUrlString);
 
         // Ensure that it is from Strava.
         if (!segmentUrl.getHost().contains("strava.com") && !segmentUrl.getHost().contains("strava.app.link"))
             throw new NotSupportedSiteUrlException("URL is not from Strava.");
 
         // Resolve Strava.App.Link URLs.
-        // It's done this way, as there are no 3xx Redirects and HttpConnection doesn't get the location.
-        if (segmentUrl.getHost().contains("strava.app.link")) {
-            URL locationUrl = new URL(Jsoup.connect(segmentUrl.toString()).get().location());
-            segmentUrl = new URL(locationUrl.getProtocol() + "://" + locationUrl.getHost() + locationUrl.getPath());
-        }
+        segmentUrl = urlNormalisationService.resolveStravaAppLink(segmentUrl);
 
         // Distinguish between the Strava Segment and Strava Route URLs.
         if (!segmentUrl.getPath().startsWith("/segments"))

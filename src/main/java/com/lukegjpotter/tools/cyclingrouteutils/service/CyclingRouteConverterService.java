@@ -21,7 +21,7 @@ public class CyclingRouteConverterService {
 
     public RouteUrlsRecord convertRoute(RouteAndDateTimeRecord routeAndDateTime) throws IOException {
         logger.trace("Convert Route");
-        // ToDo: Do URL sanitizing here. Refactor common code with SegmentConverterService.
+
         return cyclingRouteConverter.convertRoute(routeAndDateTime.url(), routeAndDateTime.dateTime());
     }
 }

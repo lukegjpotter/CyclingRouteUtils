@@ -100,7 +100,7 @@ class CyclingRouteConverterComponentTest {
                 MalformedURLException.class,
                 () -> cyclingRouteConverter.convertRoute("123", null));
 
-        assertEquals("no protocol: 123", exception.getMessage());
+        assertEquals("The URL is not correctly formed", exception.getMessage());
     }
 
     @Test

@@ -1,13 +1,12 @@
 package com.lukegjpotter.tools.cyclingrouteutils.service.component;
 
 import com.lukegjpotter.tools.cyclingrouteutils.dto.RouteUrlsRecord;
-import org.jsoup.Jsoup;
+import com.lukegjpotter.tools.cyclingrouteutils.service.UrlNormalisationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,6 +16,11 @@ import java.time.format.DateTimeParseException;
 public class CyclingRouteConverterComponent {
 
     private final Logger logger = LoggerFactory.getLogger(CyclingRouteConverterComponent.class);
+    private final UrlNormalisationService urlNormalisationService;
+
+    public CyclingRouteConverterComponent(UrlNormalisationService urlNormalisationService) {
+        this.urlNormalisationService = urlNormalisationService;
+    }
 
     public RouteUrlsRecord convertRoute(String routeUrlString, String dateTimeString) throws IOException {
         logger.trace("Convert Route");
@@ -29,20 +33,10 @@ public class CyclingRouteConverterComponent {
             routeUrlString = "https://www." + routeUrlString;
 
         // Check if Standardised URL is valid.
-        URL routeUrl;
-        try {
-            routeUrl = new URL(routeUrlString.trim());
-        } catch (MalformedURLException mue) {
-            logger.error("Error Converting Route. {}", mue.getMessage());
-            throw mue;
-        }
+        URL routeUrl = urlNormalisationService.validUrlCheck(routeUrlString);
 
         // Resolve Strava.App.Link URLs.
-        // It's done this way, as there are no 3xx Redirects and HttpConnection doesn't get the location.
-        if (routeUrl.getHost().contains("strava.app.link")) {
-            URL locationUrl = new URL(Jsoup.connect(routeUrl.toString()).get().location());
-            routeUrl = new URL(locationUrl.getProtocol() + "://" + locationUrl.getHost() + locationUrl.getPath());
-        }
+        routeUrl = urlNormalisationService.resolveStravaAppLink(routeUrl);
 
         if (!routeUrl.getHost().contains("strava.com") && !routeUrl.getHost().contains("ridewithgps.com")) {
             return new RouteUrlsRecord(routeUrl.toString(), "", "", "URL is not Strava or RideWithGPS.");
