@@ -95,13 +95,13 @@ You can use this Collection to run the REST Requests. You can change the hostnam
 Cloud instance or Route URL and Time.
 
 Postman
-Collection: [Cycling Route Utils](https://www.postman.com/bold-moon-552911/workspace/cyclingrouteutils/collection/3947605-dfff5988-bae7-479c-9a3d-9045ce20eae1?action=share&creator=3947605).
+Collection: [Cycling Route Utils](https://www.postman.com/bold-moon-552911/cyclingrouteutils/collection/opxmt3d/cyclingrouteutils?action=share&creator=3947605&active-environment=3947605-cb301250-7b70-42b9-aaee-e3dbc79528f4).
 
-In this Collection, you'll need to set the Environment (top-right where it says "No Environment", click that). The
-Collection already has Environments for localhost and the service's live deployment on Render (give it about 50 seconds
-to start-up for your first request, so maybe send a request to the `/health` endpoint first, to wake up the
-instance, and it'll be rapid response after that). The Collection also has prefilled JSON bodies, to ensure that you
-get the correct `ZonedDateTime` format and the Route URL.
+In this Collection, the Environment is pre-configured to default to the Render deployment.  
+The Collection has Environments for localhost and the service's live deployment on Render. When using Render, give it
+about 50 seconds to start-up for your first request, so maybe send a request to the `/health` endpoint first, to wake
+up the instance, and it'll be rapid response after that). The Collection also has prefilled JSON bodies, to ensure that
+you get the correct `ZonedDateTime` format and the Route URL.
 
 ### Swagger UI (SpringDoc-OpenApi)
 
