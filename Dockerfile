@@ -4,7 +4,7 @@
 #
 # Use Gradle runtime as a parent image. Gradle Zip is already on this Image, but the Deamon still takes time to start.
 # The version of Gradle should match the version listed in the distributionUrl in the gradle/wrapper/gradle-wrapper.properties.
-FROM gradle:8.8-jdk17-alpine AS buildstage
+FROM gradle:8.14-jdk17-alpine AS buildstage
 ENV APP_HOME=/app
 # Set the working directory to /app.
 WORKDIR $APP_HOME
