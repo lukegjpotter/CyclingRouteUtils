@@ -13,13 +13,13 @@ Adding Heroku support.
 Date and time for MyWindSock Segments.  
 Coming Soon: Heroku, Railways, Amazon Lambda Deloyment Buttons.
 
-### How to Use the Endpoints
+## How to Use the Endpoints
 
 Optional: Install JSON to format/pretty print the Response on the CLI.
 
     sudo npm i -g json
 
-##### Route Endpoint
+### Route Endpoint
 
 Curl instructions
 
@@ -39,7 +39,7 @@ Then it will return
         "errorMessage": ""
     }
 
-##### Segment Endpoint
+### Segment Endpoint
 
 Curl instructions
 
@@ -55,7 +55,7 @@ Then it will return
       "errorMessage": ""
     }
 
-##### Route HTML Endpoint
+### Route HTML Endpoint
 
 The `/route/html` Endpoint. This will return HTML instead of JSON. The benefit is that, if you execute this Endpoint in
 Postman, and choose the "Preview" option for the Response, you can copy and paste the contents straight into a Spread
@@ -87,7 +87,7 @@ Then it will return
         </body>
     </html>
 
-#### Postman REST Client
+### Postman REST Client
 
 PostMan Instructions
 
@@ -103,7 +103,7 @@ to start-up for your first request, so maybe send a request to the `/health` end
 instance, and it'll be rapid response after that). The Collection also has prefilled JSON bodies, to ensure that you
 get the correct `ZonedDateTime` format and the Route URL.
 
-#### Swagger UI (SpringDoc-OpenApi)
+### Swagger UI (SpringDoc-OpenApi)
 
 Swagger Instructions
 
