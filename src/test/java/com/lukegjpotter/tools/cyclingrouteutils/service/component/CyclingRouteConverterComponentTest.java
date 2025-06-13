@@ -37,7 +37,7 @@ class CyclingRouteConverterComponentTest {
                 "https://mywindsock.com/route/456/#forecast=1694015100",
                 "");
 
-        RouteUrlsRecord actualRouteUrls = cyclingRouteConverter.convertRoute("https://www.strava.com/routes/456", "06/09/2023 16:45 IST");
+        RouteUrlsRecord actualRouteUrls = cyclingRouteConverter.convertRoute("https://www.strava.com/routes/456", "06/09/2023 16:45 Europe/Dublin");
 
         assertEquals(expectedRouteUrls, actualRouteUrls);
     }
@@ -69,15 +69,13 @@ class CyclingRouteConverterComponentTest {
 
     @Test
     public void testConvertRoute_RideWithGPS_DateTime() throws IOException {
-        String september6th16h45m = "06/09/2023 16:45 IST";
-
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://ridewithgps.com/routes/456",
                 "",
                 "https://mywindsock.com/rwgps/route/456/#forecast=1694015100",
                 "");
 
-        RouteUrlsRecord actualRouteUrls = cyclingRouteConverter.convertRoute("https://ridewithgps.com/routes/456", september6th16h45m);
+        RouteUrlsRecord actualRouteUrls = cyclingRouteConverter.convertRoute("https://ridewithgps.com/routes/456", "06/09/2023 16:45 Europe/Dublin");
 
         assertEquals(expectedRouteUrls, actualRouteUrls);
     }
@@ -134,7 +132,7 @@ class CyclingRouteConverterComponentTest {
                 "https://www.veloviewer.com/routes/3203050355643790746",
                 "https://mywindsock.com/route/3203050355643790746/#forecast=1694015100",
                 "");
-        RouteUrlsRecord actualRouteUrls = cyclingRouteConverter.convertRoute("https://strava.app.link/7VkQ8ZLsKKb", "06/09/2023 16:45 IST");
+        RouteUrlsRecord actualRouteUrls = cyclingRouteConverter.convertRoute("https://strava.app.link/7VkQ8ZLsKKb", "06/09/2023 16:45 Europe/Dublin");
 
         assertEquals(expectedRouteUrls, actualRouteUrls);
     }

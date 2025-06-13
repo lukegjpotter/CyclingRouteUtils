@@ -11,7 +11,7 @@ WORKDIR $APP_HOME
 # Copy the Source code files to the Build Stage Container.
 COPY . $APP_HOME/
 # Build the project with the Image's Gradle.
-RUN gradle clean build -x test
+RUN gradle clean build
 
 #
 # Run stage

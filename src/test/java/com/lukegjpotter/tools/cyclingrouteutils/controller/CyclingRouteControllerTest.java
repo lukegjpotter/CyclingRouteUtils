@@ -107,7 +107,7 @@ public class CyclingRouteControllerTest {
     public void testConvertRoute_RideWithGPS_DateTime_NoHttpsInDomain() {
         given()
                 .contentType(ContentType.JSON)
-                .body(new RouteAndDateTimeRecord("www.ridewithgps.com/routes/123", "06/09/2023 16:45 IST"))
+                .body(new RouteAndDateTimeRecord("www.ridewithgps.com/routes/123", "06/09/2023 16:45 Europe/Dublin"))
                 .when()
                 .post("/route")
                 .then()

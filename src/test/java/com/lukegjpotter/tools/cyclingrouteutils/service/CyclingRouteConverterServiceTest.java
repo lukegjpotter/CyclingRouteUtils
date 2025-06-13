@@ -46,7 +46,7 @@ class CyclingRouteConverterServiceTest {
 
     @Test
     public void testConvertRoute_Strava_DateTime() throws IOException {
-        String september6th16h45m = "06/09/2023 16:45 IST";
+        String september6th16h45m = "06/09/2023 16:45 Europe/Dublin";
 
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://www.strava.com/routes/456",
@@ -78,7 +78,7 @@ class CyclingRouteConverterServiceTest {
 
     @Test
     public void testConvertRoute_RideWithGPS_DateTime() throws IOException {
-        String september6th16h45m = "06/09/2023 16:45 IST";
+        String september6th16h45m = "06/09/2023 16:45 Europe/Dublin";
 
         RouteUrlsRecord expectedRouteUrls = new RouteUrlsRecord(
                 "https://ridewithgps.com/routes/456",
